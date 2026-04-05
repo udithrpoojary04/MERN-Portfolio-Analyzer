@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Portfolio Analyzer (AIPort) — Complete Project Explanation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+      --primary: #3B82F6;
+      --purple: #8B5CF6;
+      --green: #10B981;
+      --dark: #0F172A;
+      --gray-50: #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-300: #CBD5E1;
+      --gray-500: #64748B;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1E293B;
+      --gray-900: #0F172A;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--gray-800);
+      line-height: 1.7;
+      background: white;
+      font-size: 11pt;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+      padding: 40px 50px;
+    }
+
+    /* ── Title ── */
+    h1 {
+      font-size: 26pt;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 8px;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+    h1 .accent { color: var(--primary); }
+
+    /* ── Section Headers ── */
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      color: var(--dark);
+      margin-top: 32px;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--gray-700);
+      margin-top: 20px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+
+    h4 {
+      font-size: 11pt;
+      font-weight: 600;
+      color: var(--gray-600);
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p { margin-bottom: 10px; }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--gray-200);
+      margin: 28px 0;
+    }
+
+    /* ── Blockquotes (Pitch / Q&A Answers) ── */
+    blockquote {
+      background: linear-gradient(135deg, #EFF6FF, #F0F4FF);
+      border-left: 4px solid var(--primary);
+      padding: 12px 18px;
+      margin: 10px 0 16px 0;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      color: var(--gray-700);
+    }
+    blockquote em { font-style: normal; font-weight: 500; }
+
+    /* ── Q&A Answers (specific style) ── */
+    .qa-answer {
+      background: var(--gray-50);
+      border-left: 4px solid var(--purple);
+      padding: 10px 16px;
+      margin: 6px 0 18px 0;
+      border-radius: 0 6px 6px 0;
+      font-style: normal;
+      color: var(--gray-700);
+      font-size: 10.5pt;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px 0;
+      font-size: 10pt;
+    }
+
+    thead th {
+      background: var(--dark);
+      color: white;
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 9.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    thead th:first-child { border-radius: 6px 0 0 0; }
+    thead th:last-child { border-radius: 0 6px 0 0; }
+
+    tbody td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--gray-200);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) { background: var(--gray-50); }
+    tbody tr:hover { background: #EFF6FF; }
+
+    /* ── Code Blocks ── */
+    pre {
+      background: var(--gray-900);
+      color: #E2E8F0;
+      padding: 16px 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 9.5pt;
+      line-height: 1.6;
+      margin: 10px 0 16px 0;
+      page-break-inside: avoid;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      font-size: 9.5pt;
+    }
+
+    p code, li code, td code {
+      background: #EFF6FF;
+      color: var(--primary);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 9pt;
+    }
+
+    /* ── Lists ── */
+    ul, ol {
+      margin: 8px 0 14px 24px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* ── Architecture Diagram Box ── */
+    .diagram-box {
+      background: var(--gray-50);
+      border: 2px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 14px 0 20px 0;
+      page-break-inside: avoid;
+    }
+    .diagram-box pre {
+      background: white;
+      color: var(--gray-800);
+      border: 1px solid var(--gray-200);
+      font-size: 8.5pt;
+      line-height: 1.5;
+    }
+
+    /* ── Flow Boxes ── */
+    .flow-box {
+      background: linear-gradient(135deg, #F0F4FF, #EFF6FF);
+      border: 1px solid #BFDBFE;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 8px 0 14px 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 9pt;
+      line-height: 1.7;
+      color: var(--gray-700);
+    }
+
+    /* ── Badges ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 8.5pt;
+      font-weight: 600;
+      margin: 0 2px;
+    }
+    .badge-blue { background: #DBEAFE; color: #1E40AF; }
+    .badge-green { background: #D1FAE5; color: #065F46; }
+    .badge-purple { background: #EDE9FE; color: #5B21B6; }
+    .badge-red { background: #FEE2E2; color: #991B1B; }
+
+    /* ── Strong / Bold ── */
+    strong { color: var(--gray-900); font-weight: 700; }
+
+    /* ── Key Points Box ── */
+    .key-points {
+      background: #FFF7ED;
+      border: 1px solid #FED7AA;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 12px 0;
+    }
+
+    /* ── Print Styles ── */
+    @media print {
+      body { font-size: 10pt; }
+      .container { padding: 20px 30px; }
+      h2 { margin-top: 24px; }
+      pre { font-size: 8.5pt; }
+      .page-break { page-break-before: always; }
+    }
+
+    /* ── Section dividers ── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gray-300), transparent);
+      margin: 30px 0;
+    }
+
+    /* ── Header banner ── */
+    .header-banner {
+      background: linear-gradient(135deg, var(--dark), #1E293B);
+      color: white;
+      padding: 36px 40px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+    }
+    .header-banner h1 { color: white; margin-bottom: 12px; }
+    .header-banner p { color: var(--gray-300); font-size: 12pt; margin: 0; }
+    .header-banner .subtitle { 
+      color: var(--primary); 
+      font-weight: 600; 
+      font-size: 11pt;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <div class="header-banner">
+    <h1>AI Portfolio Analyzer <span class="accent">(AIPort)</span></h1>
+    <p>Complete Project Explanation &amp; Interview Guide</p>
+    <p class="subtitle">MERN Stack &bull; Groq AI (Llama 3.3 70B) &bull; GitHub API &bull; JWT Authentication</p>
+  </div>
+
+  <!-- ═══════════ ONE-LINE PITCH ═══════════ -->
+  <h2>🎯 One-Line Pitch</h2>
+  <blockquote>
+    <em>"AIPort is a full-stack MERN application that uses AI (Groq/Llama 3.3) to analyze a developer's GitHub profile, portfolio, and resume — generating personalized scores, metrics, and actionable career suggestions."</em>
+  </blockquote>
+
+  <!-- ═══════════ PROBLEM ═══════════ -->
+  <h2>📌 Problem Statement</h2>
+  <p>Developers often struggle to understand how their online presence (GitHub, portfolio, resume) is perceived by recruiters. There's no easy way to get an objective, data-driven assessment of their tech profile. <strong>AIPort solves this</strong> by aggregating real GitHub data and feeding it to an LLM to produce a structured, personalized analysis report.</p>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ TECH STACK ═══════════ -->
+  <h2>🏗️ Tech Stack</h2>
+  <table>
+    <thead>
+      <tr><th>Layer</th><th>Technology</th><th>Why I Chose It</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Frontend</strong></td><td>React 19 + Vite</td><td>Fast HMR, modern JSX, component-based architecture</td></tr>
+      <tr><td><strong>Styling</strong></td><td>Tailwind CSS 3</td><td>Utility-first, rapid UI development, dark mode support</td></tr>
+      <tr><td><strong>Animations</strong></td><td>Framer Motion</td><td>Declarative animations, smooth page transitions</td></tr>
+      <tr><td><strong>Charts</strong></td><td>Recharts</td><td>React-native charting (Radar + Bar charts for scores)</td></tr>
+      <tr><td><strong>Icons</strong></td><td>Lucide React</td><td>Modern, tree-shakable icon library</td></tr>
+      <tr><td><strong>HTTP Client</strong></td><td>Axios</td><td>Promise-based, interceptors, better error handling</td></tr>
+      <tr><td><strong>Routing</strong></td><td>React Router v7</td><td>Client-side routing with protected routes</td></tr>
+      <tr><td><strong>Backend</strong></td><td>Node.js + Express 5</td><td>Non-blocking I/O, async error handling</td></tr>
+      <tr><td><strong>Database</strong></td><td>MongoDB + Mongoose</td><td>Schema-flexible NoSQL, perfect for variable AI data</td></tr>
+      <tr><td><strong>Authentication</strong></td><td>JWT (jsonwebtoken)</td><td>Stateless auth, no session storage needed</td></tr>
+      <tr><td><strong>Password</strong></td><td>bcryptjs</td><td>Industry-standard, salt-based password hashing</td></tr>
+      <tr><td><strong>File Upload</strong></td><td>Multer</td><td>Handles multipart/form-data for resume uploads</td></tr>
+      <tr><td><strong>AI Engine</strong></td><td>Groq API (Llama 3.3 70B)</td><td>Ultra-fast LLM inference, free tier available</td></tr>
+      <tr><td><strong>External API</strong></td><td>GitHub REST API v3</td><td>Fetches real user data, repos, languages, activity</td></tr>
+      <tr><td><strong>Environment</strong></td><td>dotenv</td><td>Secure management of API keys and secrets</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ ARCHITECTURE ═══════════ -->
+  <h2>🏛️ System Architecture</h2>
+  <div class="diagram-box">
+    <pre>
+┌─────────────────────────────────────────────────────────────────────┐
+│                    FRONTEND (React + Vite — Port 5173)              │
+│                                                                     │
+│  ┌──────────┐  ┌──────────────┐  ┌───────────────┐  ┌───────────┐ │
+│  │ Landing  │  │ Login /      │  │ User          │  │ Analysis  │ │
+│  │ Page     │→ │ Register     │→ │ Dashboard     │→ │ Dashboard │ │
+│  └──────────┘  └──────┬───────┘  └───────┬───────┘  └───────────┘ │
+│                       │                   │                         │
+│              ┌────────┴───────────────────┘                        │
+│              │  AuthContext (Global State — JWT Token)              │
+│              └────────┬────────────────────────────────────────────│
+└───────────────────────┼────────────────────────────────────────────┘
+                        │  HTTP (Axios + Bearer Token)
+                        ▼
+┌───────────────────────────────────────────────────────────────────┐
+│                    BACKEND (Express 5 — Port 5000)                │
+│                                                                   │
+│  ┌──────────────┐   ┌─────────────────┐   ┌──────────────────┐  │
+│  │ /api/auth    │   │ /api/analysis    │   │ /api/admin       │  │
+│  │ • register   │   │ • POST (submit)  │   │ • GET users      │  │
+│  │ • login      │   │ • GET (history)  │   │ • GET analytics  │  │
+│  └──────────────┘   └────────┬────────┘   └──────────────────┘  │
+│                              │                                    │
+│               ┌──────────────┴──────────────┐                    │
+│               │   protect Middleware (JWT)    │                    │
+│               │   adminProtect (Role Check)  │                    │
+│               └──────────────────────────────┘                    │
+└──────────────────────┬──────────────┬─────────────────────────────┘
+                       │              │
+            ┌──────────┘              └──────────┐
+            ▼                                     ▼
+┌───────────────────┐  ┌──────────────┐  ┌───────────────────┐
+│  GitHub REST API  │  │   Groq API   │  │     MongoDB       │
+│  v3               │  │  Llama 3.3   │  │  (Mongoose ODM)   │
+│  • /users/{user}  │  │  70B Model   │  │  • Users          │
+│  • /repos         │  │              │  │  • Analyses        │
+│  • /events        │  │  → JSON resp │  │                   │
+└───────────────────┘  └──────────────┘  └───────────────────┘
+    </pre>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ PROJECT STRUCTURE ═══════════ -->
+  <h2>📂 Project Structure</h2>
+  <pre>
+AI Port analyzer/
+├── backend/
+│   ├── server.js                  # Express app entry point
+│   ├── .env                       # Environment variables (keys, DB URI)
+│   ├── controllers/
+│   │   ├── authController.js      # Register & Login logic
+│   │   ├── analysisController.js  # GitHub fetch + Groq AI + DB save
+│   │   └── adminController.js     # Admin: list users, platform stats
+│   ├── models/
+│   │   ├── User.js                # User schema (name, email, password, role)
+│   │   └── Analysis.js            # Analysis schema (scores, metrics, suggestions)
+│   ├── routes/
+│   │   ├── authRoutes.js          # /api/auth endpoints
+│   │   ├── analysisRoutes.js      # /api/analysis + protect middleware
+│   │   └── adminRoutes.js         # /api/admin + admin role check
+│   └── uploads/                   # Uploaded resume PDFs
+│
+└── frontend/
+    └── src/
+        ├── main.jsx               # React entry, wraps App with AuthProvider
+        ├── App.jsx                # Router + protected routes
+        ├── context/
+        │   └── AuthContext.jsx    # Global auth state (user, login, logout)
+        ├── components/
+        │   ├── Navbar.jsx         # Navigation with auth-aware links
+        │   └── ThemeToggle.jsx    # Dark/Light mode toggle
+        └── pages/
+            ├── LandingPage.jsx    # Hero section + feature cards
+            ├── Login.jsx          # Email/password login form
+            ├── Register.jsx       # Registration form
+            ├── UserDashboard.jsx  # Submit GitHub/Portfolio/Resume
+            ├── AnalysisDashboard.jsx  # View AI report (charts)
+            └── AdminDashboard.jsx # Admin: user table + stats</pre>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ WORKING FLOW ═══════════ -->
+  <h2>🔄 Complete Working Flow</h2>
+
+  <h3>Step 1: User Registration</h3>
+  <div class="flow-box">
+    User fills form → POST /api/auth/register → bcrypt hashes password →<br>
+    Save to MongoDB Users collection → Generate JWT → Return token to frontend →<br>
+    Store in localStorage via AuthContext
+  </div>
+
+  <h3>Step 2: User Login</h3>
+  <div class="flow-box">
+    User enters credentials → POST /api/auth/login → Find user by email →<br>
+    bcrypt.compare(password) → Generate JWT → Return token → Store in localStorage
+  </div>
+
+  <h3>Step 3: Submit Analysis (Core Feature)</h3>
+  <div class="flow-box">
+    User enters GitHub username + Portfolio URL + optional Resume PDF<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+    Frontend sends FormData with Bearer token → POST /api/analysis<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+    protect middleware → Extracts JWT from Authorization header → jwt.verify() → Attaches req.user<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;↓<br>
+    analysisController.submitAnalysis() runs
+  </div>
+
+  <h4>3a. GitHub Data Collection (3 API calls)</h4>
+  <div class="flow-box">
+    1. GET /users/{username} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ Profile: bio, followers, repos count, account age<br>
+    2. GET /users/{username}/repos &nbsp;→ Top 30 repos: languages, stars, forks, topics<br>
+    3. GET /users/{username}/events → Recent activity: pushes, PRs, issues
+  </div>
+
+  <p><strong>Aggregated data includes:</strong></p>
+  <ul>
+    <li>Total stars &amp; forks across all repos</li>
+    <li>Language breakdown (e.g., "JavaScript (12 repos), Python (5 repos)")</li>
+    <li>Top 8 repos ranked by stars with descriptions</li>
+    <li>Recent activity counts (push events, PRs, issues)</li>
+    <li>Profile completeness (bio, blog, hireable flag, profile README)</li>
+  </ul>
+
+  <h4>3b. AI Analysis (Groq API Call)</h4>
+  <div class="flow-box">
+    Build rich prompt with ALL GitHub data →<br>
+    POST to Groq API (Llama 3.3 70B model) →<br>
+    LLM returns structured JSON: { scores, metrics, suggestionItems, jobReadiness }
+  </div>
+
+  <h4>3c. Save &amp; Return</h4>
+  <div class="flow-box">
+    Parse AI JSON response → Create MongoDB Analysis document →<br>
+    Link to user via userId → Return to frontend → Navigate to /analysis
+  </div>
+
+  <h3>Step 4: View Analysis Report</h3>
+  <div class="flow-box">
+    GET /api/analysis → Fetch user's analyses sorted by date →<br>
+    Display: Radar chart, Score cards, Progress bars, Suggestions, Job readiness badge
+  </div>
+
+  <h3>Step 5: Admin Dashboard</h3>
+  <div class="flow-box">
+    Admin login → protect middleware → adminProtect (role === 'admin') →<br>
+    GET /api/admin/users → List all registered users<br>
+    GET /api/admin/analytics → Total users, total analyses, recent reports
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ API ENDPOINTS ═══════════ -->
+  <h2>🔌 API Endpoints</h2>
+  <table>
+    <thead>
+      <tr><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>POST</code></td><td><code>/api/auth/register</code></td><td><span class="badge badge-green">Public</span></td><td>Create new user account</td></tr>
+      <tr><td><code>POST</code></td><td><code>/api/auth/login</code></td><td><span class="badge badge-green">Public</span></td><td>Authenticate &amp; get JWT</td></tr>
+      <tr><td><code>POST</code></td><td><code>/api/analysis</code></td><td><span class="badge badge-blue">JWT</span></td><td>Submit profile for AI analysis</td></tr>
+      <tr><td><code>GET</code></td><td><code>/api/analysis</code></td><td><span class="badge badge-blue">JWT</span></td><td>Get user's past analyses</td></tr>
+      <tr><td><code>GET</code></td><td><code>/api/admin/users</code></td><td><span class="badge badge-purple">Admin</span></td><td>List all platform users</td></tr>
+      <tr><td><code>GET</code></td><td><code>/api/admin/analytics</code></td><td><span class="badge badge-purple">Admin</span></td><td>Platform-wide statistics</td></tr>
+      <tr><td><code>GET</code></td><td><code>/api/health</code></td><td><span class="badge badge-green">Public</span></td><td>Server health check</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ AUTH FLOW ═══════════ -->
+  <h2>🔐 Authentication Flow</h2>
+  <div class="diagram-box">
+    <pre>
+  User (Browser)          Frontend (React)         Backend (Express)        MongoDB
+       │                        │                        │                     │
+       │  Enter email+password  │                        │                     │
+       │───────────────────────►│                        │                     │
+       │                        │  POST /api/auth/login  │                     │
+       │                        │───────────────────────►│                     │
+       │                        │                        │  User.findOne()     │
+       │                        │                        │────────────────────►│
+       │                        │                        │◄────────────────────│
+       │                        │                        │  User document      │
+       │                        │                        │                     │
+       │                        │                        │  bcrypt.compare()   │
+       │                        │                        │  jwt.sign({ id })   │
+       │                        │                        │                     │
+       │                        │  { _id, name, token }  │                     │
+       │                        │◄───────────────────────│                     │
+       │                        │                        │                     │
+       │                        │  localStorage.setItem  │                     │
+       │                        │  AuthContext.setUser()  │                     │
+       │                        │                        │                     │
+       │  Redirect → /dashboard │                        │                     │
+       │◄───────────────────────│                        │                     │
+    </pre>
+  </div>
+
+  <p><strong>Key Security Decisions:</strong></p>
+  <ul>
+    <li>Passwords are hashed with <strong>bcrypt</strong> (10 salt rounds) — never stored in plaintext</li>
+    <li>JWT tokens expire after <strong>30 days</strong></li>
+    <li>The <code>protect</code> middleware extracts the token from the <code>Authorization: Bearer &lt;token&gt;</code> header</li>
+    <li>Admin routes have a <strong>two-layer middleware</strong>: first <code>protect</code> (authenticate), then <code>adminProtect</code> (authorize role)</li>
+  </ul>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ AI PIPELINE ═══════════ -->
+  <h2>🤖 AI Analysis Pipeline — Deep Dive</h2>
+
+  <h3>Why Groq + Llama 3.3?</h3>
+  <ul>
+    <li><strong>Groq</strong> provides the fastest LLM inference (hundreds of tokens/sec) — the analysis feels near-instant</li>
+    <li><strong>Llama 3.3 70B Versatile</strong> is open-source, highly capable, and free on Groq's API tier</li>
+    <li><code>temperature: 0.3</code> balances consistency with slight variation between analyses</li>
+  </ul>
+
+  <h3>How I Prevent Generic/Hallucinated Results</h3>
+  <ol>
+    <li><strong>Real data injection</strong>: GitHub API data is fetched BEFORE the AI call — the prompt contains verified numbers (stars, followers, repo names)</li>
+    <li><strong>Metrics are hardcoded</strong>: <code>totalProjects</code>, <code>followers</code>, <code>stars</code> come directly from GitHub API, NOT from the AI</li>
+    <li><strong>Specific prompt engineering</strong>: The prompt explicitly says <em>"Each suggestion MUST reference the developer's SPECIFIC repos, languages, or gaps by name"</em></li>
+    <li><strong>Structured JSON output</strong>: The AI is forced to return a strict JSON schema — any deviation is caught by <code>JSON.parse()</code></li>
+  </ol>
+
+  <h3>Error Handling</h3>
+  <ul>
+    <li>If GitHub API fails → graceful fallback with error message in prompt</li>
+    <li>If Groq returns markdown-wrapped JSON → regex strips <code>```json</code> fencing</li>
+    <li>If JSON parsing fails → error is thrown and returned as 500 to user</li>
+  </ul>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ FRONTEND ARCHITECTURE ═══════════ -->
+  <h2>🎨 Frontend Architecture</h2>
+
+  <h3>State Management: React Context API</h3>
+  <ul>
+    <li><strong>AuthContext</strong> wraps the entire app via <code>AuthProvider</code> in <code>main.jsx</code></li>
+    <li>Provides: <code>user</code>, <code>login()</code>, <code>register()</code>, <code>logout()</code>, <code>loading</code></li>
+    <li>User data persisted in <code>localStorage</code> → survives page refreshes</li>
+  </ul>
+
+  <h3>Routing: Protected Routes Pattern</h3>
+  <pre>
+// Only authenticated users can access dashboard
+&lt;Route path="/dashboard" element={user ? &lt;UserDashboard /&gt; : &lt;Navigate to="/login" /&gt;} /&gt;
+
+// Only admins can access admin panel
+&lt;Route path="/admin" element={user?.role === 'admin' ? &lt;AdminDashboard /&gt; : &lt;Navigate to="/" /&gt;} /&gt;
+
+// Already logged in? Skip login page
+&lt;Route path="/login" element={!user ? &lt;Login /&gt; : &lt;Navigate to="/dashboard" /&gt;} /&gt;</pre>
+
+  <h3>UI/UX Highlights</h3>
+  <ul>
+    <li><strong>Dark/Light mode</strong> toggle persisted in localStorage</li>
+    <li><strong>Glassmorphism</strong> design (<code>.glass-panel</code> — backdrop-blur, translucent backgrounds)</li>
+    <li><strong>Framer Motion</strong> entrance animations on every page</li>
+    <li><strong>Recharts Radar Chart</strong> for visual skill distribution</li>
+    <li><strong>Gradient text</strong> and glow effects for premium feel</li>
+  </ul>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ DATABASE SCHEMAS ═══════════ -->
+  <h2>🗄️ Database Schemas</h2>
+
+  <h3>User Schema</h3>
+  <pre>
+{
+  name: String (required),
+  email: String (required, unique),
+  password: String (required, bcrypt hashed),
+  role: String (enum: ['user', 'admin'], default: 'user'),
+  createdAt: Date
+}</pre>
+
+  <h3>Analysis Schema</h3>
+  <pre>
+{
+  userId: ObjectId (ref: 'User', required),  // Links analysis to user
+  githubUsername: String,
+  portfolioUrl: String,
+  resumePath: String,                         // File path on server
+  scores: {
+    overall: Number,       // 0-100
+    codeQuality: Number,   // 0-100
+    design: Number,        // 0-100
+    impact: Number         // 0-100
+  },
+  metrics: {
+    totalProjects: Number, // From GitHub API directly
+    followers: Number,     // From GitHub API directly
+    stars: Number          // Aggregated from all repos
+  },
+  suggestionItems: [String],  // 4 personalized suggestions
+  jobReadiness: String,       // Beginner | Intermediate | Advanced | Ready to Hire
+  createdAt: Date
+}</pre>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ KEY FEATURES ═══════════ -->
+  <h2>⚡ Key Features Summary</h2>
+  <table>
+    <thead>
+      <tr><th>Feature</th><th>Implementation</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>User Authentication</strong></td><td>JWT + bcrypt, register/login/logout</td></tr>
+      <tr><td><strong>Role-Based Access</strong></td><td>Two middleware layers (protect → adminProtect)</td></tr>
+      <tr><td><strong>GitHub Integration</strong></td><td>3 API calls: profile, repos, events</td></tr>
+      <tr><td><strong>AI-Powered Analysis</strong></td><td>Groq API with Llama 3.3 70B, structured JSON output</td></tr>
+      <tr><td><strong>Personalized Suggestions</strong></td><td>Prompt engineering forces repo/language-specific advice</td></tr>
+      <tr><td><strong>Visual Reports</strong></td><td>Radar chart, score cards, progress bars</td></tr>
+      <tr><td><strong>Resume Upload</strong></td><td>Multer handles PDF file uploads</td></tr>
+      <tr><td><strong>Dark/Light Theme</strong></td><td>CSS class toggle + localStorage persistence</td></tr>
+      <tr><td><strong>Admin Dashboard</strong></td><td>User management + platform analytics</td></tr>
+      <tr><td><strong>Responsive Design</strong></td><td>Tailwind responsive utilities (mobile → desktop)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-divider"></div>
+  <div class="page-break"></div>
+
+  <!-- ═══════════ INTERVIEW Q&A ═══════════ -->
+  <h2>🎤 Interview Q&amp;A — Anticipated Questions</h2>
+
+  <h3>Q1: "Why MERN stack?"</h3>
+  <div class="qa-answer">MongoDB's schema flexibility is ideal because AI responses can vary in structure. Express + Node gives me non-blocking I/O for handling multiple GitHub API calls concurrently. React's component architecture made the dashboard modular and reusable.</div>
+
+  <h3>Q2: "Why not use OpenAI? Why Groq?"</h3>
+  <div class="qa-answer">Groq provides the fastest LLM inference available — ~500 tokens/sec vs OpenAI's ~80. For a real-time analysis tool, speed is critical so users don't wait 30+ seconds. Llama 3.3 70B is open-source and performs comparably to GPT-4 for structured tasks. Groq also has a generous free tier.</div>
+
+  <h3>Q3: "How do you prevent the AI from hallucinating scores?"</h3>
+  <div class="qa-answer">The key metrics (totalProjects, followers, stars) are fetched directly from GitHub's API and hardcoded into the JSON template — the AI doesn't generate these numbers. For scores, the prompt includes detailed scoring rubrics tied to real data points, and I set a low temperature (0.3) for consistency.</div>
+
+  <h3>Q4: "How does authentication work?"</h3>
+  <div class="qa-answer">I use stateless JWT authentication. On login, the server verifies the password using bcrypt, generates a JWT signed with a secret key, and sends it to the client. The client stores it in localStorage and includes it as a Bearer token in the Authorization header for every protected API call. The <code>protect</code> middleware extracts and verifies this token on each request.</div>
+
+  <h3>Q5: "What happens if the GitHub API rate-limits you?"</h3>
+  <div class="qa-answer">Unauthenticated GitHub API calls allow 60 requests/hour per IP. For production, I'd add a GitHub Personal Access Token (5,000/hour). The code handles failures gracefully — if the GitHub fetch fails, the analysis continues with limited data and the AI acknowledges the unavailable data.</div>
+
+  <h3>Q6: "Why store analysis results in MongoDB instead of just returning them?"</h3>
+  <div class="qa-answer">Storing enables users to view their analysis history, track progress over time, and the admin dashboard to aggregate platform-wide analytics. It also avoids redundant API calls if the user refreshes the page.</div>
+
+  <h3>Q7: "How is the admin panel secured?"</h3>
+  <div class="qa-answer">Two-layer middleware: first <code>protect</code> verifies the JWT token (authentication), then <code>adminProtect</code> checks if <code>req.user.role === 'admin'</code> (authorization). The frontend also hides admin routes using conditional rendering, but the real security is server-side.</div>
+
+  <h3>Q8: "What's the most challenging part you built?"</h3>
+  <div class="qa-answer">The AI analysis pipeline. Getting the LLM to return consistently parseable JSON while being specific to each user required careful prompt engineering. The first version gave generic suggestions to everyone because I was only passing 2 data points. I solved it by fetching detailed repo data, language breakdowns, and activity patterns, then instructing the AI to reference specific repos by name.</div>
+
+  <h3>Q9: "How would you scale this for production?"</h3>
+  <div class="qa-answer">
+    • Add Redis caching for GitHub API responses (cache for 1 hour)<br>
+    • Move JWT token to httpOnly cookies to prevent XSS<br>
+    • Add rate limiting on the analysis endpoint (express-rate-limit)<br>
+    • Deploy backend on AWS/Railway, frontend on Vercel<br>
+    • Use MongoDB Atlas for managed database<br>
+    • Add GitHub OAuth login flow instead of username input<br>
+    • Queue analysis jobs with Bull/BullMQ for heavy traffic
+  </div>
+
+  <h3>Q10: "What's the FormData approach for file upload?"</h3>
+  <div class="qa-answer">The frontend creates a <code>FormData</code> object and appends all fields. Axios automatically sets <code>Content-Type</code> to <code>multipart/form-data</code> with the correct boundary. On the backend, Multer middleware parses the request, saves the file to <code>uploads/</code>, and exposes <code>req.file</code> and <code>req.body</code>.</div>
+
+  <h3>Q11: "Explain the Context API usage."</h3>
+  <div class="qa-answer">I used React's Context API instead of Redux because the app has simple global state — just the user object. The <code>AuthProvider</code> wraps the entire app, providing <code>user</code>, <code>login()</code>, <code>register()</code>, <code>logout()</code>, and <code>loading</code> via <code>useContext(AuthContext)</code>. User data persists in localStorage across page refreshes.</div>
+
+  <h3>Q12: "How do protected routes work on the frontend?"</h3>
+  <div class="qa-answer">React Router v7's <code>&lt;Navigate&gt;</code> component acts as a guard. <code>/dashboard</code> checks if <code>user</code> exists — if not, redirects to <code>/login</code>. <code>/admin</code> additionally checks <code>user.role === 'admin'</code>. This is UX-level protection; the real security is the backend middleware.</div>
+
+  <h3>Q13: "What design patterns did you use?"</h3>
+  <div class="qa-answer">
+    • <strong>MVC Pattern</strong>: Models (Mongoose), Views (React), Controllers (Express handlers)<br>
+    • <strong>Middleware Chain</strong>: protect → adminProtect → controller for layered security<br>
+    • <strong>Context Provider Pattern</strong>: Centralized auth state management<br>
+    • <strong>Separation of Concerns</strong>: GitHub fetching is a separate function from AI analysis logic
+  </div>
+
+  <h3>Q14: "How does dark mode work?"</h3>
+  <div class="qa-answer">The <code>ThemeToggle</code> component toggles a <code>dark</code> class on the <code>&lt;html&gt;</code> element. Tailwind's <code>dark:</code> prefix applies alternate styles. The theme is stored in localStorage, so it persists across sessions.</div>
+
+  <h3>Q15: "If you had more time, what would you add?"</h3>
+  <div class="qa-answer">
+    • <strong>GitHub OAuth</strong>: Connect GitHub directly instead of typing username<br>
+    • <strong>Resume PDF parsing</strong>: Use pdf-parse to extract text for the AI prompt<br>
+    • <strong>Analysis comparison</strong>: Side-by-side comparison of reports over time<br>
+    • <strong>Scheduled re-analysis</strong>: Auto re-analyze profiles weekly and email results<br>
+    • <strong>Portfolio scraping</strong>: Actually fetch and analyze portfolio website content
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- ═══════════ HOW TO RUN ═══════════ -->
+  <h2>🚀 How to Run the Project</h2>
+  <pre>
+# Terminal 1 — Backend
+cd backend
+npm install
+node server.js          # Server runs on http://localhost:5000
+
+# Terminal 2 — Frontend
+cd frontend
+npm install
+npm run dev             # App runs on http://localhost:5173</pre>
+
+  <p><strong>Required Environment Variables</strong> (backend/.env):</p>
+  <pre>
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/ai-portfolio-analyzer
+JWT_SECRET=&lt;your-secret-key&gt;
+GROQ_API_KEY=&lt;your-groq-api-key&gt;</pre>
+
+</div>
+</body>
+</html>

@@ -26,8 +26,9 @@ const UserDashboard = () => {
       await axios.post('http://localhost:5000/api/analysis', formData, config);
       navigate('/analysis');
     } catch (err) {
-      alert('Analysis failed.');
-      console.error(err);
+      const errorMsg = err.response?.data?.message || err.message || 'Analysis failed.';
+      alert(`Analysis failed: ${errorMsg}`);
+      console.error('Analysis Error:', err.response?.data || err.message);
       setLoading(false);
     }
   };
