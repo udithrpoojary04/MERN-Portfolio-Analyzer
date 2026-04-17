@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
-import { Users, Activity, Layers } from 'lucide-react';
+import { Users, Activity, Layers, Trash2 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -28,6 +28,31 @@ const AdminDashboard = () => {
     fetchAdminData();
   }, [user]);
 
+  const handleDeleteUser = async (id) => {
+    if (window.confirm('Are you sure you want to delete this user and all their analyses?')) {
+      try {
+        const config = { headers: { Authorization: `Bearer ${user.token}` } };
+        await axios.delete(`http://localhost:5000/api/admin/users/${id}`, config);
+        setUsers(users.filter(u => u._id !== id));
+        setAnalyses(analyses.filter(a => a.userId?._id !== id && a.userId !== id));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  const handleDeleteAnalysis = async (id) => {
+    if (window.confirm('Are you sure you want to delete this analysis?')) {
+      try {
+        const config = { headers: { Authorization: `Bearer ${user.token}` } };
+        await axios.delete(`http://localhost:5000/api/admin/analyses/${id}`, config);
+        setAnalyses(analyses.filter(a => a._id !== id));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
   if (!analytics) return <div className="text-center p-20 dark:text-white">Loading Admin Panel...</div>;
 
   return (
@@ -52,6 +77,7 @@ const AdminDashboard = () => {
                 <th className="px-6 py-4">Email</th>
                 <th className="px-6 py-4">Role</th>
                 <th className="px-6 py-4">Joined On</th>
+                <th className="px-6 py-4 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -65,6 +91,15 @@ const AdminDashboard = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4">{new Date(u.createdAt).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-center">
+                    <button 
+                      onClick={() => handleDeleteUser(u._id)}
+                      className="p-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-full transition-colors"
+                      title="Delete User"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -85,6 +120,7 @@ const AdminDashboard = () => {
                 <th className="px-6 py-4">Job Readiness</th>
                 <th className="px-6 py-4">Overall Score</th>
                 <th className="px-6 py-4">Date Performed</th>
+                <th className="px-6 py-4 text-center">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -102,6 +138,15 @@ const AdminDashboard = () => {
                   </td>
                   <td className="px-6 py-4 font-bold">{a.scores?.overall ? `${a.scores.overall}/100` : 'N/A'}</td>
                   <td className="px-6 py-4">{new Date(a.createdAt).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-center">
+                    <button 
+                      onClick={() => handleDeleteAnalysis(a._id)}
+                      className="p-2 bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 text-red-600 dark:text-red-400 rounded-full transition-colors"
+                      title="Delete Analysis"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

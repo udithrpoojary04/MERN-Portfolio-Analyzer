@@ -36,3 +36,26 @@ export const getAllAnalyses = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    
+    await Analysis.deleteMany({ userId: user._id }); // cascade delete analyses
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: 'User removed' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteAnalysis = async (req, res) => {
+  try {
+    const analysis = await Analysis.findByIdAndDelete(req.params.id);
+    if (!analysis) return res.status(404).json({ message: 'Analysis not found' });
+    res.json({ message: 'Analysis removed' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
