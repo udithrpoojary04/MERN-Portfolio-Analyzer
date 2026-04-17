@@ -20,9 +20,6 @@ const Navbar = () => {
         <ThemeToggle />
         {user ? (
           <>
-            <Link to="/dashboard" className="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 font-medium transition-colors">
-              Dashboard
-            </Link>
             <button onClick={logout} className="btn-secondary">
               Logout
             </button>
@@ -30,10 +27,7 @@ const Navbar = () => {
         ) : (
           <div className="flex space-x-4">
             <Link to="/login" className="text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 font-medium py-2 transition-colors">
-              Login
-            </Link>
-            <Link to="/register" className="btn-primary">
-              Sign Up
+              Admin Login
             </Link>
           </div>
         )}

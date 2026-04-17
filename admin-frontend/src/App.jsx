@@ -3,11 +3,8 @@ import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 
 import Navbar from './components/Navbar';
-import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
-import Register from './pages/Register';
-import UserDashboard from './pages/UserDashboard';
-import AnalysisDashboard from './pages/AnalysisDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
   const { user, loading } = useContext(AuthContext);
@@ -24,11 +21,8 @@ function App() {
         <Navbar />
         <main className="container mx-auto px-4 pb-12">
           <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-            <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-            <Route path="/dashboard" element={user ? <UserDashboard /> : <Navigate to="/login" />} />
-            <Route path="/analysis" element={user ? <AnalysisDashboard /> : <Navigate to="/login" />} />
+            <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+            <Route path="/" element={user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/login" />} />
           </Routes>
         </main>
       </div>
