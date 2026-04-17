@@ -27,3 +27,12 @@ export const getPlatformAnalytics = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getAllAnalyses = async (req, res) => {
+  try {
+    const analyses = await Analysis.find({}).populate('userId', 'name email').sort({ createdAt: -1 });
+    res.json(analyses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
