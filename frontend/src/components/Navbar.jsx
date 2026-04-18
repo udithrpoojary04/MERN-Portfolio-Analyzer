@@ -12,7 +12,7 @@ const Navbar = () => {
       <Link to="/" className="flex items-center space-x-2 text-primary-500 hover:text-primary-400 transition-colors">
         <BrainCircuit size={28} className="drop-shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
         <span className="text-xl font-bold tracking-wider text-gray-900 dark:text-gray-100">
-          AI<span className="text-primary-500">Port</span>
+          Dev<span className="text-primary-500">Sight</span>
         </span>
       </Link>
       

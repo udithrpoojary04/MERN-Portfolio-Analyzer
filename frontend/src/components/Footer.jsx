@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="flex items-center space-x-2 text-primary-500 mb-4 md:mb-0">
           <BrainCircuit size={24} className="drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
           <span className="text-lg font-bold tracking-wider text-gray-900 dark:text-gray-100">
-            AI<span className="text-primary-500">Port</span>
+            Dev<span className="text-primary-500">Sight</span>
           </span>
         </div>
         <div className="text-sm text-gray-500 dark:text-gray-400">
