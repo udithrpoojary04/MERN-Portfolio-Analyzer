@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -20,9 +21,9 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
         <Navbar />
-        <main className="container mx-auto px-4 pb-12">
+        <main className="flex-grow container mx-auto px-4 pb-12">
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
@@ -31,6 +32,7 @@ function App() {
             <Route path="/analysis" element={user ? <AnalysisDashboard /> : <Navigate to="/login" />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </Router>
   );

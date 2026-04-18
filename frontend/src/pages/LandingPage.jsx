@@ -19,7 +19,7 @@ const LandingPage = () => {
         </div>
 
         <h1 className="text-5xl md:text-7xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-br from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
-          Elevate your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">Tech Career</span> with AI
+          Elevate your <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]">Tech Career&nbsp;</span> with AI
         </h1>
         
         <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
